@@ -23,3 +23,27 @@
     安卓
     ios
 
+### web前端工程师
+      web前端全栈
+           (用vue react写后台管理系统 用node写后台接口)
+
+      移动端全栈
+          安卓
+          ios
+          webapp
+          Hybrid app
+          微信小程序
+
+      大前端
+           用vue react写后台管理系统
+           用node写后台接口
+           webapp
+           Hybrid app
+           微信小程序
+
+### 移动端的第一个阶段(达姆老师) webapp
+    自己实现一个滑屏库
+    自己封装npm包
+### 移动端的第二个阶段(天禹老师) RN
+### 移动端的第三个阶段(志勇老师) 微信小程序
+
