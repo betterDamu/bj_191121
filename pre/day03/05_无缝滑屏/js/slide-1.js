@@ -2,9 +2,9 @@
     // w.slide = Object.create(null);
     w.slide = {};
     function course(arr) {
-        //ÎÞ·ì»¬ÆÁÂß¼­
+        //æ— ç¼æ»‘å±é€»è¾‘
 
-        //Éú³Éhtml½á¹¹
+        //ç”Ÿæˆhtmlç»“æž„
         var wrapC = document.querySelector("#wrap .course-wrap");
         var ulNode = document.createElement("ul");
         var liNodes = document.querySelectorAll("#wrap .course-wrap > .list > li")
@@ -15,13 +15,13 @@
         }
         wrapC.appendChild(ulNode);
 
-        //¶¯Ì¬»¯ÑùÊ½
+        //åŠ¨æ€åŒ–æ ·å¼
         var styleNode = document.createElement("style");
         styleNode.innerHTML="#wrap .course-wrap > .list{width: "+arr.length+"00%}";
         styleNode.innerHTML+=" #wrap .course-wrap > .list > li{width: "+(100/arr.length)+"%;}";
         document.head.appendChild(styleNode);
 
-        //querySelectorAllµÄ¿Ó  ¾²Ì¬ÁÐ±í
+        //querySelectorAllçš„å‘  é™æ€åˆ—è¡¨
         liNodes = document.querySelectorAll("#wrap .course-wrap > .list > li");
         setTimeout(function () {
             wrapC.style.height =liNodes[0].offsetHeight+"px";

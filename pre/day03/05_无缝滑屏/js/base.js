@@ -1,6 +1,6 @@
 ;(function () {
-    //1. ¼Ómeta±êÇ©
-    //2. ½ûÖ¹È«¾ÖµÄÄ¬ÈÏĞĞÎª
+    //1. åŠ metaæ ‡ç­¾
+    //2. ç¦æ­¢å…¨å±€çš„é»˜è®¤è¡Œä¸º
     var wrapNode = document.querySelector("#wrap");
 
     wrapNode.addEventListener("touchstart",function (ev) {
@@ -8,7 +8,7 @@
         ev.preventDefault();
     })
 
-    //3.remÊÊÅä
+    //3.remé€‚é…
     var styleNode = document.createElement("style");
     var w = document.documentElement.clientWidth/16;
     styleNode.innerHTML="html{font-size:"+w+"px!important}"
