@@ -1,14 +1,14 @@
 (function (w) {
     w.slide = {};
     function course(arr) {
-        //ÎŞ·ì»¬ÆÁÂß¼­
+        //æ— ç¼æ»‘å±é€»è¾‘
         var wrapC = document.querySelector(".course-wrap");
         if(!wrapC){
             return;
         }
 
 
-        //Éú³Éhtml½á¹¹
+        //ç”Ÿæˆhtmlç»“æ„
         var wrapC = document.querySelector(".course-wrap");
         var ulNode = document.createElement("ul");
         var liNodes = document.querySelectorAll(".course-wrap > .list > li")
@@ -20,13 +20,13 @@
         }
         wrapC.appendChild(ulNode);
 
-        //¶¯Ì¬»¯ÑùÊ½
+        //åŠ¨æ€åŒ–æ ·å¼
         var styleNode = document.createElement("style");
         styleNode.innerHTML=".course-wrap > .list{width: "+arr.length+"00%}";
         styleNode.innerHTML+=".course-wrap > .list > li{width: "+(100/arr.length)+"%;}";
         document.head.appendChild(styleNode);
 
-        //querySelectorAllµÄ¿Ó  ¾²Ì¬ÁĞ±í
+        //querySelectorAllçš„å‘  é™æ€åˆ—è¡¨
         setTimeout(function () {
             liNodes = document.querySelectorAll(".course-wrap > .list > li");
             wrapC.style.height =liNodes[0].offsetHeight+"px";
@@ -34,15 +34,15 @@
 
 
         /*
-           *»¬ÆÁÂß¼­
-           *    µÚÒ»²½: »ñÈ¡listÒ»¿ªÊ¼µÄÎ»ÖÃ
-           *    µÚ¶ş²½: ÄÃµ½ÊÖÖ¸»¬¶¯µÄ¾àÀë
-           *    µÚÈı²½: ½«ÊÖÖ¸»¬¶¯µÄ¾àÀë¸øÔªËØ¼ÓÉÏ
+           *æ»‘å±é€»è¾‘
+           *    ç¬¬ä¸€æ­¥: è·å–listä¸€å¼€å§‹çš„ä½ç½®
+           *    ç¬¬äºŒæ­¥: æ‹¿åˆ°æ‰‹æŒ‡æ»‘åŠ¨çš„è·ç¦»
+           *    ç¬¬ä¸‰æ­¥: å°†æ‰‹æŒ‡æ»‘åŠ¨çš„è·ç¦»ç»™å…ƒç´ åŠ ä¸Š
         * */
-        var eleStartX = 0; // ÔªËØÒ»¿ªÊ¼µÄÎ»ÖÃ
-        var startX = 0;    // ÊÖÖ¸Ò»¿ªÊ¼µÄÎ»ÖÃ
-        var index = 0;    //  ÊÖÖ¸Ì§ÆğÊ±ulµÄÎ»ÖÃ
-        var disX =0;      //  ÊÖÖ¸»¬¶¯Ò»´ÎµÄ¾àÀë
+        var eleStartX = 0; // å…ƒç´ ä¸€å¼€å§‹çš„ä½ç½®
+        var startX = 0;    // æ‰‹æŒ‡ä¸€å¼€å§‹çš„ä½ç½®
+        var index = 0;    //  æ‰‹æŒ‡æŠ¬èµ·æ—¶ulçš„ä½ç½®
+        var disX =0;      //  æ‰‹æŒ‡æ»‘åŠ¨ä¸€æ¬¡çš„è·ç¦»
         wrapC.addEventListener("touchstart",function (ev) {
             ulNode.style.transition="";
             ev = ev || event;
@@ -54,7 +54,7 @@
             ev = ev || event;
             var touchC = ev.changedTouches[0];
             var nowX = touchC.clientX;
-            disX = nowX - startX; // nowXµÄÖµÒ»Ö±ÔÚ±»Í¬²½  ³ı·ÇÊÖÖ¸Ì§ÆğÀ´
+            disX = nowX - startX; // nowXçš„å€¼ä¸€ç›´åœ¨è¢«åŒæ­¥  é™¤éæ‰‹æŒ‡æŠ¬èµ·æ¥
 
             ulNode.style.left =  eleStartX + disX+"px";
         })
@@ -81,7 +81,7 @@
             ulNode.style.left =  index*document.documentElement.clientWidth+"px";
         })
 
-        //Ğ¡Ô²µã
+        //å°åœ†ç‚¹
 
         if(wrapP){
             for(var i=0;i<arr.length;i++){

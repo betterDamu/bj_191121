@@ -20,26 +20,26 @@
     //arr:当前无缝滑屏需要的图片的地址
     function slide(arr){
         var swiperWrap = document.querySelector(".swiper-wrap");//滑屏区域
+        var ulNode = document.createElement("ul");//滑屏元素
+        var ponitWrap = document.querySelector(".swiper-wrap > .point-wrap");//小圆点
+        var liNode = document.querySelector(".swiper-wrap .list li");
+        var styleNode = document.createElement("style");//创建一个style标签
         if(!swiperWrap){
             throw new Error("页面上缺少swiper-wrap这个滑屏区域")
             return ;
         }
 
         //根据arr动态的去创建滑屏元素
-        var ulNode = document.createElement("ul");//滑屏元素
         ulNode.classList.add("list"); // 给ulNode加class的
         for(var i=0;i<arr.length;i++){
             ulNode.innerHTML+="<li><img src="+(arr[i])+"></li>";
         }
         swiperWrap.appendChild(ulNode);
-
-        var styleNode = document.createElement("style");
         styleNode.innerHTML=".swiper-wrap .list{width:"+(arr.length)+"00%}";
         styleNode.innerHTML+=".swiper-wrap .list li{width:"+(1/arr.length)*100+"%}";
         document.head.appendChild(styleNode);
 
         //小圆点相关的逻辑
-        var ponitWrap = document.querySelector(".swiper-wrap > .point-wrap");
         if(ponitWrap){
             for(var i=0;i<arr.length;i++){
                 if (i==0){
@@ -50,6 +50,41 @@
             }
         }
 
+        //重新渲染滑屏区域的高度
+        liNode = document.querySelector(".swiper-wrap .list li");
+        //代码执行到第55行时 界面可能还没有渲染成功
+        setTimeout(()=>{
+            swiperWrap.style.height = liNode.offsetHeight + "px";
+        },200)
+
+        //开始滑屏
+        move(swiperWrap,ulNode)
+    }
+    //滑屏的主体方法
+    function move(wrap,node){
+        /*
+            基本逻辑
+                1. 拿到滑屏元素一开始的位置
+                2. 计算出手指滑动的距离
+                3. 将手指滑动的距离给滑屏元素加上
+        */
+        var eleStartX = 0;
+        var touchStartX = 0;
+        wrap.addEventListener("touchstart",function (ev) {
+            ev = ev || event;
+            var touchC = ev.changedTouches[0];
+            touchStartX = touchC.clientX;//手指一开始的位置
+            eleStartX = node.offsetLeft;//滑屏元素一开始的位置
+        })
+        wrap.addEventListener("touchmove",function (ev) {
+            ev = ev || event;
+            var touchC = ev.changedTouches[0];
+            var touchNowX = touchC.clientX;//手指的实时位置
+            var touchDisX = touchNowX - touchStartX;//手指滑动的距离
+
+            node.style.left = eleStartX + touchDisX +"px";
+        })
+        wrap.addEventListener("touchend",function () {})
     }
     w.swiper.init =init
     w.swiper.slide=slide
