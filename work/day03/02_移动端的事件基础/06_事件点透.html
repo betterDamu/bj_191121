@@ -24,40 +24,37 @@
             height: 200px;
             background: pink;
             text-align: center;
-            line-height: 200px;
+            overflow: auto;
 
             position: absolute;
             left:0;
-            right:0;
             top:0;
-            bottom:0;
-            margin: auto;
+
+            opacity: 0.5;
         }
     </style>
 </head>
 <body>
     <div id="app">
         <div id="wrap">
-            wrap
+
         </div>
-        <div id="inner">
-            inner
-        </div>
+        <a href="http://www.atguigu.com">回娘家</a>
     </div>
 </body>
 <script>
     var app = document.querySelector("#app");
-    var inner = document.querySelector("#inner");
     app.addEventListener("touchstart",(ev)=>{
         ev = ev || event;
-        console.log(ev.cancelable)
-        ev.preventDefault() //这一行代码在chrome的模拟器中是没有作用的!! 在真机上也不可以的!
-    })
-    inner.addEventListener("touchstart",(ev)=>{
-        ev = ev || event;
-        ev.stopPropagation();
+        ev.preventDefault()
     })
 
+
+    // pc端的事件在移动端有300毫秒的延迟
+    var wrap = document.querySelector("#wrap");
+    wrap.addEventListener("touchstart",function(){
+        this.style.display = "none";
+    })
 </script>
 <script src="https://cdn.bootcdn.net/ajax/libs/less.js/3.11.1/less.min.js"></script>
 </html>
