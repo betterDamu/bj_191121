@@ -63,10 +63,8 @@
             swiperWrap.style.height = liNode.offsetHeight + "px";
         },200)
 
-        //手动滑屏
+        //开始滑屏
         move(swiperWrap,ulNode,ponitWrap,arr,needWF)
-        //自动滑屏
-        autoMove(ulNode,ponitWrap)
     };
     function move(wrap,node,pWrap,arr,needWF){
         var eleStartX = 0;
@@ -128,38 +126,6 @@
 
             node.style.transition = ".5s transform";
             css(node,"translateX",index*document.documentElement.clientWidth)
-        })
-    };
-
-    function autoMove(node,pWrap){
-        clearInterval(node.timer);
-
-        var autoFlag = 0; //所有的下标都看成负值
-        node.timer = setInterval(function () {
-            node.style.transition = ".5s transform linear"
-            //自动滑屏
-            autoFlag--;
-            css(node,"translateX",autoFlag*document.documentElement.clientWidth);
-
-            //小圆点的逻辑
-            if(pWrap){
-                var points = pWrap.querySelectorAll("span");
-                for(var i=0;i<points.length;i++){
-                    points[i].classList.remove("active");
-                }
-                points[-autoFlag%pWrap.size].classList.add("active");
-            }
-        },2000);
-
-        //代码的执行是非常快的 界面的渲染是滞后的
-        node.addEventListener("transitionend",function () {
-            //完成过渡动画后会触发的事件
-            //无缝 当自动滑到第二组的最后一张时 立马跳到第一组的最后一张
-            if(autoFlag  === 1-pWrap.size*2){
-                autoFlag = 1-pWrap.size;
-                node.style.transition = ""
-                css(node,"translateX",autoFlag*document.documentElement.clientWidth)
-            }
         })
     }
 
