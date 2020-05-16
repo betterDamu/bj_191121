@@ -83,18 +83,30 @@
                 node.style.transform = text;
             }else if(arguments.length === 2){
                 //读取操作
+                val = node.transform && node.transform[type];
+                if(val === undefined){
+                    if(type === "scale" || type === "scaleX" || type === "scaleY"){
+                        val =1; //缩放 默认值:1
+                    }else if(type === "translateX" || type === "translateY" || type === "translateZ"){
+                        val = 0; //位移 旋转 默认值:0
+                    }else if(type === "rotate" || type === "rotateX" || type === "rotateY" || type === "rotateZ"){
+                        val = 0; //位移 旋转 默认值:0
+                    }
+                }
+                return val;
             }else{
                 throw new Error("css函数的参数至少要包含两个")
             }
         }
 
         var appNode = document.querySelector("#app")
-        css(appNode,"translateX",100) //transform:"translateX(100px)"
-        css(appNode,"translateY",90) //transform:"translateX(100px) translateY(100px)"
-        css(appNode,"rotate",45)      //transform:"translateX(100px) translateY(100px) rotate(45deg)"
-        css(appNode,"scale",.5)        //transform:"translateX(100px) translateY(100px) rotate(45deg) scale(1)"
+        //css(appNode,"translateX",100) //transform:"translateX(100px)"
+        //css(appNode,"translateY",90) //transform:"translateX(100px) translateY(100px)"
+        //css(appNode,"rotate",45)      //transform:"translateX(100px) translateY(100px) rotate(45deg)"
+        //css(appNode,"scale",.5)        //transform:"translateX(100px) translateY(100px) rotate(45deg) scale(1)"
 
-
+        console.log(css(appNode,"translateX"))
+        console.log(css(appNode,"scale2222"))
 
         /*
             var appNode = document.querySelector("#app");

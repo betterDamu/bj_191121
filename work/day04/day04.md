@@ -6,3 +6,8 @@
             将自己的页面放进去 index.html
             fis3 server start : 启动fis3的静态资源服务器
     4. 打开cmd窗口 输入ipconfig命令 查看自己的ip
+
+### day04 下午的任务
+    无缝
+    自动轮播
+    防抖动
