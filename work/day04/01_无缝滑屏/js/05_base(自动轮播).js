@@ -63,7 +63,7 @@
         //手动滑屏
         move(swiperWrap,ulNode,ponitWrap,arr,needWF)
         //自动滑屏
-        autoMove(ulNode,ponitWrap,0)
+        autoMove(ulNode,ponitWrap)
     };
     function move(wrap,node,pWrap,arr,needWF){
         var eleStartX = 0;
@@ -74,12 +74,9 @@
             ev = ev || event;
             node.style.transition = "";
 
-            //停掉自动滑屏
-            clearInterval(node.timer)
-
-            //获取手指一开始的位置
             var touchC = ev.changedTouches[0];
             touchStartX = touchC.clientX;
+
 
             //无缝的逻辑
             if(needWF !== null){
@@ -127,17 +124,14 @@
             }
 
             node.style.transition = ".5s transform";
-            css(node,"translateX",index*document.documentElement.clientWidth);
-
-            //重新开启自动轮播
-            autoMove(node,pWrap,index)
+            css(node,"translateX",index*document.documentElement.clientWidth)
         })
     };
 
-    function autoMove(node,pWrap,autoFlag){
+    function autoMove(node,pWrap){
         clearInterval(node.timer);
 
-        //var autoFlag = 0; //所有的下标都看成负值
+        var autoFlag = 0; //所有的下标都看成负值
         node.timer = setInterval(function () {
             node.style.transition = ".5s transform linear"
             //自动滑屏
