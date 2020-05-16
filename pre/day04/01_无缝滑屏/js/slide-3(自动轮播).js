@@ -6,7 +6,7 @@
             return;
         }
 
-        //Éú³Éhtml½á¹¹
+        //ç”Ÿæˆhtmlç»“æ„
         var wrapC = document.querySelector(".course-wrap");
         var ulNode = document.createElement("ul");
         var liNodes = document.querySelectorAll(".course-wrap > .list > li")
@@ -14,7 +14,7 @@
 
 
 
-        //ÎŞ·ì && ×Ô¶¯ÂÖ²¥
+        //æ— ç¼ && è‡ªåŠ¨è½®æ’­
         var pointsLength = arr.length;
         var needWF = wrapC.getAttribute("needWF")
         var needAuto = wrapC.getAttribute("needAuto");
@@ -26,37 +26,37 @@
         }
         ulNode.size =arr.length;
 
-        //Éú³ÉÍ¼Æ¬ÁĞ±í
+        //ç”Ÿæˆå›¾ç‰‡åˆ—è¡¨
         ulNode.classList.add("list");
         for(var i=0;i<arr.length;i++){
             ulNode.innerHTML+="<li><img src= "+(arr[i])+"></li>";
         }
         wrapC.appendChild(ulNode);
 
-        //¶¯Ì¬»¯ÑùÊ½
+        //åŠ¨æ€åŒ–æ ·å¼
         var styleNode = document.createElement("style");
         styleNode.innerHTML=".course-wrap > .list{width: "+arr.length+"00%}";
         styleNode.innerHTML+=".course-wrap > .list > li{width: "+(100/arr.length)+"%;}";
         document.head.appendChild(styleNode);
 
 
-        var eleStartX = 0; // ÔªËØÒ»¿ªÊ¼µÄÎ»ÖÃ
-        var startX = 0;    // ÊÖÖ¸Ò»¿ªÊ¼µÄÎ»ÖÃ
-        var index = 0;    //  ÊÖÖ¸Ì§ÆğÊ±ulµÄÎ»ÖÃ
+        var eleStartX = 0; // å…ƒç´ ä¸€å¼€å§‹çš„ä½ç½®
+        var startX = 0;    // æ‰‹æŒ‡ä¸€å¼€å§‹çš„ä½ç½®
+        var index = 0;    //  æ‰‹æŒ‡æŠ¬èµ·æ—¶ulçš„ä½ç½®
 
         wrapC.addEventListener("touchstart",function (ev) {
-            //Çå¶¨Ê±Æ÷
+            //æ¸…å®šæ—¶å™¨
             clearInterval(ulNode.timer);
 
-            //Çå¹ı¶É
+            //æ¸…è¿‡æ¸¡
             ulNode.style.transition="";
             ev = ev || event;
             var touchC = ev.changedTouches[0];
 
 
-            /*ÎŞ·ìÂß¼­
-                µã»÷µÚÒ»×éµÚÒ»ÕÅÊ± Ìøµ½µÚ¶ş×éµÄµÚÒ»ÕÅ
-                µã»÷µÚ¶ş×é×îºóÒ»ÕÅÊ± Ìøµ½µÚÒ»×éµÄ×îºóÒ»ÕÅ*/
+            /*æ— ç¼é€»è¾‘
+                ç‚¹å‡»ç¬¬ä¸€ç»„ç¬¬ä¸€å¼ æ—¶ è·³åˆ°ç¬¬äºŒç»„çš„ç¬¬ä¸€å¼ 
+                ç‚¹å‡»ç¬¬äºŒç»„æœ€åä¸€å¼ æ—¶ è·³åˆ°ç¬¬ä¸€ç»„çš„æœ€åä¸€å¼ */
             if(needWF !== null){
                 var whichPic = transform.css(ulNode,"translateX") / document.documentElement.clientWidth;
                 if(whichPic === 0){
@@ -67,7 +67,7 @@
                 transform.css(ulNode,"translateX",whichPic*document.documentElement.clientWidth)
             }
 
-            //ÔªËØÒ»¿ªÊ¼Î»ÖÃµÄ»ñÈ¡Ò»¶¨ÒªµÈÎŞ·ìÎ»ÖÃ³õÊ¼»¯Íê±Ï
+            //å…ƒç´ ä¸€å¼€å§‹ä½ç½®çš„è·å–ä¸€å®šè¦ç­‰æ— ç¼ä½ç½®åˆå§‹åŒ–å®Œæ¯•
             eleStartX =transform.css(ulNode,"translateX");
             startX = touchC.clientX;
         })
@@ -82,33 +82,33 @@
         })
         wrapC.addEventListener("touchend",function () {
             ulNode.style.transition=".5s transform";
-            //index ´ú±íulµÄÎ»ÖÃ
+            //index ä»£è¡¨ulçš„ä½ç½®
             index = Math.round(transform.css(ulNode,"translateX") / document.documentElement.clientWidth);
 
-            //¿ØÖÆ³¬³ö
+            //æ§åˆ¶è¶…å‡º
             if(index>0){
                 index=0;
             }else if(index < 1-arr.length){
                 index =  1-arr.length;
             }
 
-            //Ğ¡Ô²µã
+            //å°åœ†ç‚¹
             smallPointMove(index);
 
-            //index ´ú±íulµÄÎ»ÖÃ
+            //index ä»£è¡¨ulçš„ä½ç½®
             transform.css(ulNode,"translateX",index*document.documentElement.clientWidth);
 
-            //ÖØĞÂ¿ªÆô×Ô¶¯ÂÖ²¥
+            //é‡æ–°å¼€å¯è‡ªåŠ¨è½®æ’­
             if(needAuto&&needWF){
                 autoMove(ulNode,index);
             }
         })
 
 
-        //Ğ¡Ô²µã
+        //å°åœ†ç‚¹
         smallPoint(pointsLength);
 
-        //×Ô¶¯ÂÖ²¥
+        //è‡ªåŠ¨è½®æ’­
         if(needAuto&&needWF){
             autoMove(ulNode,index);
         }
@@ -116,7 +116,7 @@
 
     function autoMove(ulNode,autoFlag) {
         //var timer = 0;
-        //var autoFlag = 0; // ³éÏóulµÄÎ»ÖÃ
+        //var autoFlag = 0; // æŠ½è±¡ulçš„ä½ç½®
 
         move();
         function move() {
@@ -126,7 +126,7 @@
                 ulNode.style.transition=".7s transform linear";
                 transform.css(ulNode,"translateX",autoFlag*document.documentElement.clientWidth);
 
-                //Ğ¡Ô²µã
+                //å°åœ†ç‚¹
                 smallPointMove(autoFlag)
             },1000)
         }

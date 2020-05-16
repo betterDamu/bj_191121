@@ -1,4 +1,7 @@
-// 将定位版本的无缝滑屏  优化为 transform的版本
+// 实现无缝:
+//  1.先图片复制一组
+//  2.当点到第一组的第一张时 立马 跳到第二组的第一张
+//  3.当点到第二组的最后一张时  立马 跳到第一组的最后一张
 (function (w) {
     w.swiper = {};
     function init(wrap) {
@@ -24,6 +27,25 @@
             return ;
         }
 
+        //小圆点相关的逻辑
+        if(ponitWrap){
+            ponitWrap.size = arr.length;
+            for(var i=0;i<arr.length;i++){
+                if (i==0){
+                    ponitWrap.innerHTML+="<span class='active'></span>"
+                }else{
+                    ponitWrap.innerHTML+="<span></span>"
+                }
+            }
+        }
+
+        //是否需要无缝
+        var needWF = swiperWrap.getAttribute("needWF");
+        if(needWF !== null){
+            //先图片复制一组
+            arr = arr.concat(arr)
+        }
+
         //根据arr动态的去创建滑屏元素
         ulNode.classList.add("list"); // 给ulNode加class的
         for(var i=0;i<arr.length;i++){
@@ -34,17 +56,6 @@
         styleNode.innerHTML+=".swiper-wrap .list li{width:"+(1/arr.length)*100+"%}";
         document.head.appendChild(styleNode);
 
-        //小圆点相关的逻辑
-        if(ponitWrap){
-            for(var i=0;i<arr.length;i++){
-                if (i==0){
-                    ponitWrap.innerHTML+="<span class='active'></span>"
-                }else{
-                    ponitWrap.innerHTML+="<span></span>"
-                }
-            }
-        }
-
         //重新渲染滑屏区域的高度
         liNode = document.querySelector(".swiper-wrap .list li");
         //代码执行到第55行时 界面可能还没有渲染成功
@@ -53,22 +64,36 @@
         },200)
 
         //开始滑屏
-        move(swiperWrap,ulNode,ponitWrap,arr)
+        move(swiperWrap,ulNode,ponitWrap,arr,needWF)
     };
-    function move(wrap,node,pWrap,arr){
+    function move(wrap,node,pWrap,arr,needWF){
         var eleStartX = 0;
         var touchStartX = 0;
         var touchDisX = 0;
         var index = 0;
-        //var translateX = 0; // 记录tranlateX时候的一个偏移
         wrap.addEventListener("touchstart",function (ev) {
             ev = ev || event;
             node.style.transition = "";
 
             var touchC = ev.changedTouches[0];
             touchStartX = touchC.clientX;
-            // eleStartX = node.offsetLeft;
-            // eleStartX = translateX;
+
+
+            //无缝的逻辑
+            if(needWF !== null){
+                //需要无缝的
+                var whichPic = css(node,"translateX") / document.documentElement.clientWidth;
+                if(whichPic === 0){
+                    // 当点到第一组的第一张时 立马 跳到第二组的第一张
+                    whichPic = -pWrap.size;
+                }else if(whichPic === 1-arr.length){
+                    // 当点到第二组的最后一张时  立马 跳到第一组的最后一张
+                    whichPic = 1-pWrap.size;
+                }
+                css(node,"translateX",whichPic*document.documentElement.clientWidth)
+            }
+
+            //元素一开始的位置 一定要等无缝逻辑走完之后才能确定
             eleStartX = css(node,"translateX");
         })
         wrap.addEventListener("touchmove",function (ev) {
@@ -77,18 +102,11 @@
             var touchNowX = touchC.clientX;
             touchDisX = touchNowX - touchStartX;
 
-            // node.style.left = eleStartX + touchDisX +"px";
-            // transform: translateX(100px)
-            /*translateX = eleStartX + touchDisX;
-            node.style.transform = "translateX("+(translateX)+"px)";*/
             css(node,"translateX",eleStartX + touchDisX)
         })
         wrap.addEventListener("touchend",function () {
 
-            /*node.offsetLeft 记录的是left的偏移量 没有办法记录transform的偏移量*/
 
-            // index = Math.round(node.offsetLeft / document.documentElement.clientWidth)
-            // index = Math.round(translateX / document.documentElement.clientWidth)
             index = Math.round(css(node,"translateX") / document.documentElement.clientWidth)
 
             if(index > 0){
@@ -102,13 +120,11 @@
                 for(var i=0;i<points.length;i++){
                     points[i].classList.remove("active");
                 }
-                points[-index].classList.add("active");
+                //不管无缝有没有复制一组图片 小圆点的下标永远都是0到4
+                points[-index%pWrap.size].classList.add("active");
             }
 
-            node.style.transition = ".5s left";
-            // node.style.left = index*document.documentElement.clientWidth+"px";
-            /*translateX = index*document.documentElement.clientWidth;
-            node.style.transform = "translateX("+(translateX)+"px)";*/
+            node.style.transition = ".5s transform";
             css(node,"translateX",index*document.documentElement.clientWidth)
         })
     }
