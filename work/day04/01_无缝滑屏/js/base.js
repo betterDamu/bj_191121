@@ -1,7 +1,15 @@
-//实现自动滑屏
+//实现防抖动
+//判断用户上来的首次滑屏方向 如果是y轴方向 那以后不管怎么滑动都不会触发滑屏逻辑
+//判断用户上来的首次滑屏方向 如果是x轴方向 那以后不管怎么滑动都会触发滑屏逻辑
+
+
+//在工作区中改错了文件 不小心改了同事的文件 将你在工作区中的修改回退回去:
+//git checkout -- 回退的文件名
+
+
 (function (w) {
     w.swiper = {};
-    function init(wrap) {
+    function init(wrap,arr) {
         //挑选一个适配方案
         var styleNode = document.createElement("style");
         var w = document.documentElement.clientWidth/16;
@@ -12,6 +20,9 @@
             ev = ev || event;
             ev.preventDefault();
         })
+
+        //进行无缝滑屏的UI布局
+        slide(arr)
     };
     function slide(arr){
         var swiperWrap = document.querySelector(".swiper-wrap");//滑屏区域
@@ -60,16 +71,27 @@
             swiperWrap.style.height = liNode.offsetHeight + "px";
         },200)
 
+        var needAuto = swiperWrap.getAttribute("needAuto");
         //手动滑屏
-        move(swiperWrap,ulNode,ponitWrap,arr,needWF)
+        move(swiperWrap,ulNode,ponitWrap,arr,needWF,needAuto)
         //自动滑屏
-        autoMove(ulNode,ponitWrap,0)
+        if(needAuto!== null && needWF!== null){
+            autoMove(ulNode,ponitWrap,0)
+        }
     };
-    function move(wrap,node,pWrap,arr,needWF){
+    function move(wrap,node,pWrap,arr,needWF,needAuto){
         var eleStartX = 0;
+        var eleStartY = 0;
         var touchStartX = 0;
+        var touchStartY = 0;
         var touchDisX = 0;
+        var touchDisY = 0;
         var index = 0;
+
+        //防抖动需要的变量
+        var isFirst = true; //让一段逻辑只执行一次需要的变量
+        var isX = true; //用户的滑屏方向是否是x轴
+
         wrap.addEventListener("touchstart",function (ev) {
             ev = ev || event;
             node.style.transition = "";
@@ -80,6 +102,7 @@
             //获取手指一开始的位置
             var touchC = ev.changedTouches[0];
             touchStartX = touchC.clientX;
+            touchStartY = touchC.clientY;
 
             //无缝的逻辑
             if(needWF !== null){
@@ -97,13 +120,41 @@
 
             //元素一开始的位置 一定要等无缝逻辑走完之后才能确定
             eleStartX = css(node,"translateX");
+            eleStartY = css(node,"translateY");
+
+            //防抖动的值得重新置回来
+            isFirst = true;
+            isX = true;
         })
         wrap.addEventListener("touchmove",function (ev) {
+
+            //看门狗
+            if(!isX){
+                //咬住
+                return;//防的是后续的抖动
+            }
+
             ev = ev || event;
             var touchC = ev.changedTouches[0];
             var touchNowX = touchC.clientX;
-            touchDisX = touchNowX - touchStartX;
+            var touchNowY = touchC.clientY;
 
+            //触发一次touchmove时 手指在x轴 和 y轴的上的位移(有正 有负)
+            touchDisX = touchNowX - touchStartX;
+            touchDisY = touchNowY - touchStartY;
+
+            //判断用户上来的首次滑屏方向
+            if(isFirst){
+                isFirst = false
+                //如果在手指的滑动方向是y轴 则需要停止整个滑屏逻辑
+                if(Math.abs(touchDisY) > Math.abs(touchDisX)){
+                    //说明滑动的方向 是偏向y轴的
+                    isX=false;
+                    return; //防的是首次抖动
+                }
+            }
+
+            //真正让滑屏元素产生位移的代码!!!
             css(node,"translateX",eleStartX + touchDisX)
         })
         wrap.addEventListener("touchend",function () {
@@ -130,7 +181,9 @@
             css(node,"translateX",index*document.documentElement.clientWidth);
 
             //重新开启自动轮播
-            autoMove(node,pWrap,index)
+            if(needAuto!== null && needWF!== null){
+                autoMove(node,pWrap,index)
+            }
         })
     };
 
@@ -167,6 +220,5 @@
     }
 
     w.swiper.init =init
-    w.swiper.slide=slide
 })(window)
 
