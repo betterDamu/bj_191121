@@ -58,10 +58,10 @@
         },200)
 
         //开始滑屏
-        move(swiperWrap,ulNode,arr)
+        move(swiperWrap,ulNode,ponitWrap,arr)
     }
     //滑屏的主体方法
-    function move(wrap,node,arr){
+    function move(wrap,node,pWrap,arr){
         /*
             基本逻辑
                 1. 拿到滑屏元素一开始的位置
@@ -71,7 +71,7 @@
         var eleStartX = 0;
         var touchStartX = 0;
         var touchDisX = 0;
-        var index = 0; // 图片的下标
+        var index = 0; // 滑屏元素滑动的距离
         wrap.addEventListener("touchstart",function (ev) {
             ev = ev || event;
             node.style.transition = "";
@@ -88,24 +88,32 @@
             node.style.left = eleStartX + touchDisX +"px";
         })
         wrap.addEventListener("touchend",function () {
-            //判断一下是往左滑还是往右滑的
-            if(touchDisX > 0){
-                //往右滑 正值   图片下标 --
-                index--;
-            }else if(touchDisX<0){
-                //往左滑 负值   图片下标 ++
-                index++;
-            }
+
+            //node.offsetLeft 代表了滑屏元素在手指抬起时的实时位置!!!
+            //index : 滑屏元素的实时位置 与 视口的比例
+            // -0.4 向前滑了0.4个视口的距离  --> 0
+            // -0.6 向前滑了0.6个视口的距离  --> -1
+            index = Math.round(node.offsetLeft / document.documentElement.clientWidth)
 
             //判断一下边界情况
-            if(index < 0){
+            /*if(index < 0){
                 index =0
             }else if(index > (arr.length-1)){
                 index = arr.length-1
-            }
+            }*/
+
+            //同步小圆点
+            /*if(pWrap){
+                var points = pWrap.querySelectorAll("span");
+                for(var i=0;i<points.length;i++){
+                    points[i].classList.remove("active");
+                }
+                points[index].classList.add("active");
+            }*/
+
 
             node.style.transition = ".5s left";
-            node.style.left = -index*document.documentElement.clientWidth+"px";
+            node.style.left = index*document.documentElement.clientWidth+"px";
         })
     }
 

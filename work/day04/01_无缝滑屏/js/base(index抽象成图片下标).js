@@ -58,10 +58,10 @@
         },200)
 
         //开始滑屏
-        move(swiperWrap,ulNode,arr)
+        move(swiperWrap,ulNode,ponitWrap,arr)
     }
     //滑屏的主体方法
-    function move(wrap,node,arr){
+    function move(wrap,node,pWrap,arr){
         /*
             基本逻辑
                 1. 拿到滑屏元素一开始的位置
@@ -103,6 +103,16 @@
             }else if(index > (arr.length-1)){
                 index = arr.length-1
             }
+
+            //同步小圆点
+            if(pWrap){
+                var points = pWrap.querySelectorAll("span");
+                for(var i=0;i<points.length;i++){
+                    points[i].classList.remove("active");
+                }
+                points[index].classList.add("active");
+            }
+
 
             node.style.transition = ".5s left";
             node.style.left = -index*document.documentElement.clientWidth+"px";
