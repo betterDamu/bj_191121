@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <style>
+        #app{
+            width: 100px;
+            height: 100px;
+            background: pink;
+        }
+    </style>
+</head>
+<body>
+    <div id="app">
+
+    </div>
+</body>
+<script>
+    /*需求:
+        自己实现一个独立的库 来完成对transform 属性的操读写作
+        css(node,type,val) : css(app,"translateX",100)   写
+        css(node,type)     : css(app,"translateX")       读
+
+
+                            css(app,"translateX",100)
+                            css(app,"translateY",100)
+                                    最终的效果是 app 元素既往前移动100 也往下移动100*/
+
+
+    window.onload=function () {
+        //直接通过style来操作transform 扩展性很差
+
+        var appNode = document.querySelector("#app");
+        appNode.style.transform="translateX(100px)"
+        //..100行代碼
+        appNode.style.transform="translateY(100px)"
+    }
+</script>
+</html>

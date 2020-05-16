@@ -1,6 +1,10 @@
-// 将定位版本的无缝滑屏  优化为 transform的版本
+// 1. 加meta标签
+// 2. 挑选一个适配方案
+// 3. 禁止移动端事件的默认行为
 (function (w) {
+
     w.swiper = {};
+    //wrap:移动端开发时的包裹节点
     function init(wrap) {
         //挑选一个适配方案
         var styleNode = document.createElement("style");
@@ -13,6 +17,7 @@
             ev.preventDefault();
         })
     };
+    //arr:当前无缝滑屏需要的图片的地址
     function slide(arr){
         var swiperWrap = document.querySelector(".swiper-wrap");//滑屏区域
         var ulNode = document.createElement("ul");//滑屏元素
@@ -54,46 +59,50 @@
 
         //开始滑屏
         move(swiperWrap,ulNode,ponitWrap,arr)
-    };
+    }
+    //滑屏的主体方法
     function move(wrap,node,pWrap,arr){
+        /*
+            基本逻辑
+                1. 拿到滑屏元素一开始的位置
+                2. 计算出手指滑动的距离
+                3. 将手指滑动的距离给滑屏元素加上
+        */
         var eleStartX = 0;
         var touchStartX = 0;
         var touchDisX = 0;
-        var index = 0;
-        var translateX = 0; // 记录tranlateX时候的一个偏移
+        var index = 0; // 滑屏元素滑动的距离
         wrap.addEventListener("touchstart",function (ev) {
             ev = ev || event;
             node.style.transition = "";
 
             var touchC = ev.changedTouches[0];
-            touchStartX = touchC.clientX;
-            // eleStartX = node.offsetLeft;
-            eleStartX = translateX;
+            touchStartX = touchC.clientX;//手指一开始的位置
+            eleStartX = node.offsetLeft;//滑屏元素一开始的位置
         })
         wrap.addEventListener("touchmove",function (ev) {
             ev = ev || event;
             var touchC = ev.changedTouches[0];
-            var touchNowX = touchC.clientX;
-            touchDisX = touchNowX - touchStartX;
-
-            // node.style.left = eleStartX + touchDisX +"px";
-            // transform: translateX(100px)
-            translateX = eleStartX + touchDisX;
-            node.style.transform = "translateX("+(translateX)+"px)";
+            var touchNowX = touchC.clientX;//手指的实时位置
+            touchDisX = touchNowX - touchStartX;//手指滑动的距离
+            node.style.left = eleStartX + touchDisX +"px";
         })
         wrap.addEventListener("touchend",function () {
 
-            /*node.offsetLeft 记录的是left的偏移量 没有办法记录transform的偏移量*/
+            //node.offsetLeft 代表了滑屏元素在手指抬起时的实时位置!!!
+            //index : 滑屏元素的实时位置 与 视口的比例
+            // -0.4 向前滑了0.4个视口的距离  --> 0
+            // -0.6 向前滑了0.6个视口的距离  --> -1
+            index = Math.round(node.offsetLeft / document.documentElement.clientWidth)
 
-            // index = Math.round(node.offsetLeft / document.documentElement.clientWidth)
-            index = Math.round(translateX / document.documentElement.clientWidth)
-
+            //判断一下边界情况
             if(index > 0){
                 index =0
             }else if(index < (1-arr.length)){
                 index = 1-arr.length
             }
 
+            //同步小圆点
             if(pWrap){
                 var points = pWrap.querySelectorAll("span");
                 for(var i=0;i<points.length;i++){
@@ -102,12 +111,13 @@
                 points[-index].classList.add("active");
             }
 
+
             node.style.transition = ".5s left";
-            // node.style.left = index*document.documentElement.clientWidth+"px";
-            translateX = index*document.documentElement.clientWidth;
-            node.style.transform = "translateX("+(translateX)+"px)";
+            node.style.left = index*document.documentElement.clientWidth+"px";
         })
     }
+
+
 
     w.swiper.init =init
     w.swiper.slide=slide
