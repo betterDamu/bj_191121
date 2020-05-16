@@ -29,12 +29,78 @@
 
 
     window.onload=function () {
-        //直接通过style来操作transform 扩展性很差
+        //直接通过style来操作transform 扩展性很差  自定义css函数
 
-        var appNode = document.querySelector("#app");
-        appNode.style.transform="translateX(100px)"
-        //..100行代碼
-        appNode.style.transform="translateY(100px)"
+        /*
+            appNode.transform={
+                "translateX":100,
+                "translateY":100,
+                "rotate":45,
+                "scale":1
+            }
+        */
+
+        function css(node,type,val) {
+            if(arguments.length>=3){
+                //设置操作
+                var text = "";
+                if (!node.transform){
+                    node.transform={}
+                }
+                node.transform[type] = val;
+
+                // 性能 和 需求 谁比较重要 ?  百分百是需求重要
+
+                //{translateX:100}
+                //{translateX:100,translateY:90}
+                //{translateX:100,translateY:90,rotate:45}
+                //{translateX:100,translateY:90,rotate:45,scale:0.5}
+
+
+                for(var key in node.transform){
+                    switch (key){
+                        case "translateX":
+                        case "translateY":
+                        case "translateZ":
+                            text+= key + "("+(node.transform[key])+"px)";
+                            break;
+
+                        case "rotate":
+                        case "rotateX":
+                        case "rotateY":
+                        case "rotateZ":
+                            text+= key + "("+(node.transform[key])+"deg)";
+                            break;
+
+                        case "scale":
+                        case "scaleX":
+                        case "scaleY":
+                            text+= key + "("+(node.transform[key])+")";
+                            break;
+                    }
+                }
+
+                node.style.transform = text;
+            }else if(arguments.length === 2){
+                //读取操作
+            }else{
+                throw new Error("css函数的参数至少要包含两个")
+            }
+        }
+
+        var appNode = document.querySelector("#app")
+        css(appNode,"translateX",100) //transform:"translateX(100px)"
+        css(appNode,"translateY",90) //transform:"translateX(100px) translateY(100px)"
+        css(appNode,"rotate",45)      //transform:"translateX(100px) translateY(100px) rotate(45deg)"
+        css(appNode,"scale",.5)        //transform:"translateX(100px) translateY(100px) rotate(45deg) scale(1)"
+
+
+
+        /*
+            var appNode = document.querySelector("#app");
+            appNode.style.transform="translateX(100px)"
+            appNode.style.transform="translateY(100px)"
+        */
     }
 </script>
 </html>
