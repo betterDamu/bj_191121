@@ -99,6 +99,7 @@
         var navWrap = document.querySelector(".nav-wrap");
         //滑屏元素
         var list = document.querySelector(".nav-wrap > .list")
+        transform.css(list,"translateZ",0)
         //导航往左滑可以滑到的最远的距离(负值 数值是最小的 在没有考虑橡皮筋效果的前提下能走的最远距离)
         //滑屏元素是在滑屏区域内部滑动的;这个内部是滑屏区域不带边框的尺寸 : clientWidth
         var minX = navWrap.clientWidth - list.offsetWidth;

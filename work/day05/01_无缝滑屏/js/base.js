@@ -27,6 +27,9 @@
     function slide(arr){
         var swiperWrap = document.querySelector(".swiper-wrap");//滑屏区域
         var ulNode = document.createElement("ul");//滑屏元素
+        //开启3d硬件加速  这边3d硬件加速开启失败了   原因待查!!!
+        css(ulNode,"translateZ",0)
+
         var ponitWrap = document.querySelector(".swiper-wrap > .point-wrap");//小圆点
         var liNode = document.querySelector(".swiper-wrap .list li");
         var styleNode = document.createElement("style");//创建一个style标签
@@ -80,7 +83,7 @@
         move(swiperWrap,ulNode,ponitWrap,arr,needWF,needAuto)
         //自动滑屏
         if(needAuto!== null && needWF!== null){
-            autoMove(ulNode,ponitWrap,0)
+            autoMove(ulNode,ponitWrap,0,arr)
         }
     };
     function move(wrap,node,pWrap,arr,needWF,needAuto){
@@ -191,7 +194,7 @@
         })
     };
 
-    function autoMove(node,pWrap,autoFlag){
+    function autoMove(node,pWrap,autoFlag,arr){
         clearInterval(node.timer);
 
         //var autoFlag = 0; //所有的下标都看成负值
@@ -215,8 +218,8 @@
         node.addEventListener("transitionend",function () {
             //完成过渡动画后会触发的事件
             //无缝 当自动滑到第二组的最后一张时 立马跳到第一组的最后一张
-            if(autoFlag  === 1-pWrap.size*2){
-                autoFlag = 1-pWrap.size;
+            if(autoFlag  === 1-arr.length){
+                autoFlag = 1-arr.length/2;
                 node.style.transition = ""
                 css(node,"translateX",autoFlag*document.documentElement.clientWidth)
             }
