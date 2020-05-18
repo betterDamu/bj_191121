@@ -90,14 +90,19 @@
 </body>
 <script src="./js/transform.js"></script>
 <script>
-   /* 1. 如何在基本滑屏的基础上实现橡皮筋效果
-            我们让滑屏元素在滑动过程中(touchmove)的手指滑动的有效距离慢慢变小
-    2. 如何在橡皮筋的效果的基础上实现快速滑屏*/
+       /*
+            1. 如何在基本滑屏的基础上实现橡皮筋效果
+                    我们让滑屏元素在滑动过程中(touchmove)的手指滑动的有效距离慢慢变小
+            2. 如何在橡皮筋的效果的基础上实现快速滑屏
+        */
     window.onload=function () {
         //滑屏区域
         var navWrap = document.querySelector(".nav-wrap");
         //滑屏元素
         var list = document.querySelector(".nav-wrap > .list")
+        //导航往左滑可以滑到的最远的距离(负值 数值是最小的 在没有考虑橡皮筋效果的前提下能走的最远距离)
+        //滑屏元素是在滑屏区域内部滑动的;这个内部是滑屏区域不带边框的尺寸 : clientWidth
+        var minX = navWrap.clientWidth - list.offsetWidth;
 
         //滑屏元素一开始的位置 ; 手指一开始的位置
         var eleStartX = 0;
@@ -115,6 +120,9 @@
 
             //touchstart时手指的位置
             lastPoint =  touchC.clientX;
+
+            //正常滑屏时取消动画
+            list.style.transition="";
         })
         navWrap.addEventListener("touchmove",(ev)=>{
             ev = ev || event;
@@ -126,17 +134,37 @@
 
             var szNowX = touchC.clientX;
             var szDisX = szNowX - szStartX;
-            var traslateX = eleStartX + szDisX;
+            var translateX = eleStartX + szDisX;
 
             //要实现橡皮筋效果 就是让pointDisX的有效距离 越来越小
-
             //这个比例在每一次touchmove触发时应该要越来越小 (0,0.5]
-            scale = document.documentElement.clientWidth / ((document.documentElement.clientWidth + traslateX)*2);
-            traslateX = transform.css(list,"translateX")+(pointDisX*scale);
+            var scale = 1;
+            if(translateX > 0){
+                //左侧橡皮筋效果的逻辑
+                scale = document.documentElement.clientWidth / ((document.documentElement.clientWidth + translateX)*2.5);
+            }else if (translateX < minX) {
+                //右侧橡皮筋效果的逻辑
+                var over = minX - translateX;
+                scale = document.documentElement.clientWidth / ((document.documentElement.clientWidth + over)*2.5);
+            }
+            translateX = transform.css(list,"translateX")+(pointDisX*scale);
 
-            transform.css(list,"translateX",traslateX)
+            transform.css(list,"translateX",translateX)
         })
-        navWrap.addEventListener("touchend",()=>{})
+        navWrap.addEventListener("touchend",()=>{
+            //手指抬起时  如果发现两侧有橡皮筋拉出的拒绝  我们需要弹回去
+            //手指抬起时,list它的位置
+            var translateX = transform.css(list,"translateX");
+            if(translateX > 0){
+                //左侧橡皮筋
+                translateX = 0;
+            }else if (translateX < minX) {
+                //右侧橡皮筋
+                translateX = minX;
+            }
+            list.style.transition = ".5s transform"
+            transform.css(list,"translateX",translateX);
+        })
     }
 </script>
 </html>
