@@ -45,6 +45,9 @@
         var isFirst = true; //让一段逻辑只执行一次需要的变量
         var isY = true; //用户的滑屏方向是否是Y轴
 
+        //即点即停需要的变量
+        var clearTimer = 0;
+
         wrap.addEventListener("touchstart",(ev)=>{
             ev = ev || event;
             //防止minY在外部拿的不精确
@@ -67,6 +70,9 @@
             //防抖动的值得重新置回来
             isFirst = true;
             isY = true;
+
+            //实现即点即停
+            clearInterval(clearTimer)
         })
         wrap.addEventListener("touchmove",(ev)=>{
 
@@ -136,23 +142,52 @@
 
 
             function fast() {
+
+                //Tween算法相关的函数
+                var Tween ={
+                    Linear: function(t,b,c,d){ return c*t/d + b; },
+                    Back: function(t,b,c,d,s){
+                        if (s == undefined) s = 1.70158;
+                        return c*((t=t/d-1)*t*((s+1)*t + s) + 1) + b;
+                    }
+                }
+                function tweenMove(type,translateY,time) {
+                    clearInterval(clearTimer);
+                    var t = 0; //代表的是当前是哪一次
+                    var b = transform.css(node,"translateY") //快速滑屏的初始位置
+                    var c = translateY - b;
+                    var d = (time*1000)/(1000/60) //总次数
+                    clearTimer = setInterval(()=>{
+                        t++;
+                        if(t>d){
+                            clearInterval(clearTimer)
+                        }
+                        transform.css(node,"translateY",Tween[type](t,b,c,d))
+                    },1000/60)
+                }
+
+                var time = 1; //快速滑屏的总时间
                 var speed = pointDisY / timeDisY;
                 speed = Math.abs(speed) < 0.5 ? 0 : speed;
                 var translateY = transform.css(node,"translateY");
-                translateY = translateY + speed*800;
+                translateY = translateY + speed*200;
 
-                var bsr = "";
+                // var bsr = "";
+                var type = "Linear"
                 if(translateY > 0){
                     translateY = 0;
-                    bsr = "cubic-bezier(.06,1.85,.83,1.75)";
+                    type = "Back";
+                    //bsr = "cubic-bezier(.06,1.85,.83,1.75)";
                 }else if (translateY < minY) {
                     translateY = minY;
-                    bsr = "cubic-bezier(.06,1.85,.83,1.75)";
+                    type = "Back";
+                    //bsr = "cubic-bezier(.06,1.85,.83,1.75)";
                 }
                 //transition动画 只认起始位置 与 最终位置 拿不到动画中的每一帧
                 //要实现即点即停功能 我们是需要拿到动画中的每一帧的
-                node.style.transition = "5s "+(bsr)+" transform"
-                transform.css(node,"translateY",translateY);
+                //node.style.transition = "5s "+(bsr)+" transform"
+                //transform.css(node,"translateY",translateY);
+                tweenMove(type,translateY,time);
             }
         })
     }
