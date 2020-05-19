@@ -139,7 +139,7 @@
                 var speed = pointDisY / timeDisY;
                 speed = Math.abs(speed) < 0.5 ? 0 : speed;
                 var translateY = transform.css(node,"translateY");
-                translateY = translateY + speed*200;
+                translateY = translateY + speed*800;
 
                 var bsr = "";
                 if(translateY > 0){
@@ -149,7 +149,9 @@
                     translateY = minY;
                     bsr = "cubic-bezier(.06,1.85,.83,1.75)";
                 }
-                node.style.transition = ".5s "+(bsr)+" transform"
+                //transition动画 只认起始位置 与 最终位置 拿不到动画中的每一帧
+                //要实现即点即停功能 我们是需要拿到动画中的每一帧的
+                node.style.transition = "5s "+(bsr)+" transform"
                 transform.css(node,"translateY",translateY);
             }
         })
