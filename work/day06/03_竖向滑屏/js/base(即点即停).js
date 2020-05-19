@@ -3,7 +3,7 @@
 (function (w) {
     w.scroll = {};
 
-    function init({wrap,start,move,end,over}){
+    function init(wrap){
         //挑选一个适配方案
         var styleNode = document.createElement("style");
         var w = document.documentElement.clientWidth/16;
@@ -15,11 +15,19 @@
             ev.preventDefault();
         })
 
-        sxmove(wrap,start,move,end,over)
+        move(wrap)
     }
-    function sxmove(wrap,start,move,end,over){
-
+    function move(wrap){
+        //childNodes : 包含文本子节点  firstChild=childNodes[0]
+        //children   : 不包含文本子节点
         var node = wrap.children[0];
+        /*
+            在计算minY的时候 是有一个潜在的bug的  node这个滑屏元素里面的内容是动态生成的
+            在move方法调用的时候  滑屏元素不一定能渲染成功
+
+            当你项目中遇到一些动态生成的节点时 而且要获取这些节点的位置尺寸这种信息时 一定要长个心眼
+            最好把获取操作发到一个异步逻辑中
+        */
         var minY = wrap.clientHeight - node.offsetHeight;
 
         var eleStartX = 0;
@@ -65,9 +73,6 @@
 
             //实现即点即停
             clearInterval(clearTimer)
-
-            //定义touchstart的钩子函数
-            start && (typeof start === "function") && start.call(node)
         })
         wrap.addEventListener("touchmove",(ev)=>{
 
@@ -118,12 +123,8 @@
 
 
             transform.css(node,"translateY",translateY)
-
-            //为手动滑屏添加move钩子
-            move && (typeof move === "function") && move.call(node)
         })
         wrap.addEventListener("touchend",()=>{
-
 
 
             if(node.handMove){
@@ -138,8 +139,7 @@
             }else{
                 fast()
             }
-            //为touchend 添加end钩子
-            end && (typeof end === "function") && end.call(node)
+
 
             function fast() {
 
@@ -160,13 +160,8 @@
                     clearTimer = setInterval(()=>{
                         t++;
                         if(t>d){
-                            clearInterval(clearTimer);
-                            //快速滑屏结束
-                            over && (typeof over === "function") && over.call(node)
-                            return;
+                            clearInterval(clearTimer)
                         }
-                        //为快速滑屏添加move钩子
-                        move && (typeof move === "function") && move.call(node)
                         transform.css(node,"translateY",Tween[type](t,b,c,d))
                     },1000/60)
                 }
@@ -177,15 +172,21 @@
                 var translateY = transform.css(node,"translateY");
                 translateY = translateY + speed*200;
 
+                // var bsr = "";
                 var type = "Linear"
                 if(translateY > 0){
                     translateY = 0;
                     type = "Back";
+                    //bsr = "cubic-bezier(.06,1.85,.83,1.75)";
                 }else if (translateY < minY) {
                     translateY = minY;
                     type = "Back";
+                    //bsr = "cubic-bezier(.06,1.85,.83,1.75)";
                 }
-
+                //transition动画 只认起始位置 与 最终位置 拿不到动画中的每一帧
+                //要实现即点即停功能 我们是需要拿到动画中的每一帧的
+                //node.style.transition = "5s "+(bsr)+" transform"
+                //transform.css(node,"translateY",translateY);
                 tweenMove(type,translateY,time);
             }
         })

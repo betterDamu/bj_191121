@@ -38,8 +38,26 @@
             content.innerHTML += '周冬雨❤达姆'+(i)+'<br/>';
         }
 
-        //竖向滑屏
-        scroll.init(wrap)
+        //竖向滑屏  钩子函数 希望钩子中的this指向滑屏元素
+        scroll.init({
+            wrap:wrap,
+            start(){
+                //当用户点击到整个滑屏区域的时候 触发
+                console.log("start",this)
+            },
+            move(){
+                //当整个滑屏元素在滑动时触发
+                console.log("move",this)
+            },
+            end(){
+                //当用户的手指从滑屏区域离开时触发
+                console.log("end",this)
+            },
+            over(){
+                //当整个滑屏结束时触发
+                console.log("over",this)
+            }
+        })
     }
 </script>
 </html>
