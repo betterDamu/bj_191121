@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=no,minimum-scale=1.0,maximum-scale=1.0">
+    <style>
+        *{margin: 0;padding: 0;}
+        html,body{width: 100%;height: 100%;overflow: hidden;}
+        #wrap{width: 100%;height: 100%;text-align: center;background: pink;overflow: hidden}
+    </style>
+</head>
+<body>
+    <!--默认将滑屏区域中的第一子元素作为滑屏元素-->
+    <div id="wrap">
+        <div class="content">
+
+        </div>
+    </div>
+</body>
+<script src="./js/transform.js"></script>
+<script src="./js/base.js"></script>
+<script>
+    /*
+        0. 实现防抖动
+        1. 实现橡皮筋效果
+        2. 实现快速滑屏
+        3. 实现即点即停(基于tween算法)
+        4. 实现滚动条 (自定义滚动条)
+    */
+
+    //确保初次渲染完成
+    window.onload=function () {
+        var wrap = document.querySelector("#wrap");
+        var content = document.querySelector(".content");
+        //重绘 重排
+        for(var i=0;i<200;i++){
+            content.innerHTML += '周冬雨❤达姆'+(i)+'<br/>';
+        }
+
+        //竖向滑屏
+        scroll.init(wrap)
+    }
+</script>
+</html>
