@@ -7,7 +7,18 @@
     <style>
         *{margin: 0;padding: 0;}
         html,body{width: 100%;height: 100%;overflow: hidden;}
-        #wrap{width: 100%;height: 100%;text-align: center;background: pink;overflow: hidden}
+        #wrap{width: 100%;height: 100%;text-align: center;background: pink;overflow: hidden;position: relative}
+        #wrap > .bar{
+            width: 4px;
+            height: 40px;
+            background: deeppink;
+            position: absolute;
+            right: 0;
+            top: 0;
+
+            opacity: 0;
+            transition: 1s opacity;
+        }
     </style>
 </head>
 <body>
@@ -16,6 +27,7 @@
         <div class="content">
 
         </div>
+        <div class="bar"></div>
     </div>
 </body>
 <script src="./js/transform.js"></script>
@@ -33,6 +45,7 @@
     window.onload=function () {
         var wrap = document.querySelector("#wrap");
         var content = document.querySelector(".content");
+        var bar = document.querySelector("#wrap > .bar");
         //重绘 重排
         for(var i=0;i<200;i++){
             content.innerHTML += '周冬雨❤达姆'+(i)+'<br/>';
@@ -43,19 +56,38 @@
             wrap:wrap,
             start(){
                 //当用户点击到整个滑屏区域的时候 触发
-                console.log("start",this)
+
+                /*
+                    动态的计算滚动条的高度
+                    滚动条的高度/视口的高度 = 滑屏区域的高度/滑屏元素的高度
+
+                    滚动条的高度 = (滑屏区域的高度/滑屏元素的高度) * 视口的高度
+                */
+                var scale = (wrap.clientHeight / content.offsetHeight);
+                bar.style.height = scale  * document.documentElement.clientHeight + "px";
+                bar.style.opacity=1;
             },
             move(){
                 //当整个滑屏元素在滑动时触发
-                console.log("move",this)
+                /*
+                    滑屏元素在滑动明时 让滚动条反方向移动
+                    滚动条滑动的实时距离 / 滚动条可以滑动的最远距离
+                        = 滑屏元素滑动的实时距离/滑屏元素可以滑动的最远距离
+                */
+                var scale = transform.css(this,"translateY")
+                                / (this.offsetHeight -  document.documentElement.clientHeight);
+                var barMax = document.documentElement.clientHeight - bar.offsetHeight;
+                transform.css(bar,"translateY",-scale*barMax)
             },
             end(){
                 //当用户的手指从滑屏区域离开时触发
-                console.log("end",this)
+                // console.log("end",this)
+                // bar.style.opacity=0;
             },
             over(){
                 //当整个滑屏结束时触发
-                console.log("over",this)
+                // console.log("over",this)
+                bar.style.opacity=0;
             }
         })
     }
