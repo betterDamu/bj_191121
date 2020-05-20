@@ -13,9 +13,9 @@ Vue.config.productionTip = false
     }
   }
 
-   template:`<div id="app">
-      <img src="./assets/logo.png">
-    </div>`
+  template:`<div id="app">
+    <img src="./assets/logo.png">
+  </div>`
 */
 new Vue({
   el: '#app',
