@@ -5,6 +5,10 @@ const config = require('../config')
 const vueLoaderConfig = require('./vue-loader.conf')
 
 function resolve (dir) {
+  //__dirname : node中的一个系统变量 代表的是当前文件所处的一个绝对目录
+  //__dirname :  build的绝对地址
+  // path.join(__dirname, '..') : demo2的绝对地址
+  // path.join(__dirname, '..', dir) : src的绝对地址
   return path.join(__dirname, '..', dir)
 }
 
@@ -25,8 +29,8 @@ module.exports = {
   resolve: {
     extensions: ['.js', '.vue', '.json'],
     alias: {
-      'vue$': 'vue/dist/vue.esm.js',
-      '@': resolve('src'),
+      'vue$': 'vue/dist/vue.esm.js', //文件
+      '@': resolve('src'),   //目录
     }
   },
   module: {
