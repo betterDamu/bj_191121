@@ -1,15 +1,13 @@
 <template>
   <div id="app">
-    <span>123 456</span>
     <img src="./assets/logo.png">
   </div>
 </template>
 
 <script>
-
-export default {
-  name: 'App'
-}
+  export default {
+    name: 'App'
+  }
 </script>
 
 <style>

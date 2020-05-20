@@ -11,6 +11,7 @@
 
 ### npm相关的命令
     npm root -g : 查看电脑上全局安装的包
+    npm init -y : 生成项目的描述文件(package.json)
     npm 脚本:
         npm run 脚本的名字(如果说脚本的名字叫start 则run可以省略)
         npm脚本执行windows命令 它会自动在项目的node_modules中.bin中去寻找对应的命令
@@ -65,7 +66,7 @@
     7. 脚手架与windows环境变量的结合
 
 
-### 打包时的一些细节
+### 打包时的一些细节 (包的查找机制)
     main.js --> app.js
 
 
