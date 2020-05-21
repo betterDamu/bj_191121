@@ -9,7 +9,7 @@ export default {
     var a = 'a'
     console.log(a)
 
-    var b = "b"; // eslint-disable-line
+    var b = "b";
 
     /* eslint-disable */
       var c = "c";

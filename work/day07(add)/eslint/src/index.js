@@ -7,5 +7,5 @@ var obj = {
 }
 console.log(obj)
 setTimeout(() => {
-  console.log('---')
+  console.log('---');
 })
