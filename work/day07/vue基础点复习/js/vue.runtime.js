@@ -259,7 +259,7 @@
     return res
   }
 
-  /* eslint-disable no-unused-vars */
+  /* eslint.md-disable no-unused-vars */
 
   /**
    * Perform no operation.
@@ -273,7 +273,7 @@
    */
   var no = function (a, b, c) { return false; };
 
-  /* eslint-enable no-unused-vars */
+  /* eslint.md-enable no-unused-vars */
 
   /**
    * Return the same value.
@@ -955,9 +955,9 @@
    * the prototype chain using __proto__
    */
   function protoAugment (target, src) {
-    /* eslint-disable no-proto */
+    /* eslint.md-disable no-proto */
     target.__proto__ = src;
-    /* eslint-enable no-proto */
+    /* eslint.md-enable no-proto */
   }
 
   /**
@@ -1042,11 +1042,11 @@
       },
       set: function reactiveSetter (newVal) {
         var value = getter ? getter.call(obj) : val;
-        /* eslint-disable no-self-compare */
+        /* eslint.md-disable no-self-compare */
         if (newVal === value || (newVal !== newVal && value !== value)) {
           return
         }
-        /* eslint-enable no-self-compare */
+        /* eslint.md-enable no-self-compare */
         if (customSetter) {
           customSetter();
         }
