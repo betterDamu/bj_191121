@@ -1,5 +1,9 @@
 //data就是data.json对应的js对象
-const {seller,goods,ratings} = require("./data/data.json")
+const {seller,goods,ratings} = require("./data/data.json");
+const path = require('path')
+function resolve (dir) {
+    return path.join(__dirname, dir)
+}
 module.exports={
     lintOnSave:false,
     devServer:{
@@ -15,6 +19,14 @@ module.exports={
             app.get('/api/ratings', function(req, res) {
                 res.json({ratings});
             });
+        }
+    },
+    configureWebpack:{
+        resolve: {
+            alias: {
+                'pages': resolve('src/pages'),
+                'components': resolve('src/components'),
+            }
         }
     }
 }

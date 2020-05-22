@@ -1,32 +1,34 @@
 <template>
   <div id="app">
     <!--一级组件来渲染一级路由-->
+    <div class="test">{{test}}</div>
+    <i class="icon-qrcode"></i>
+    <v-test></v-test>
     <router-view></router-view>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
-import axios from "axios"
-export default {
-  name: 'App',
-  components: {
-    HelloWorld
-  },
-  async mounted(){
-      const seller = await axios.get("/api/seller");
-      console.log(seller)
+  import test from "components/test.vue"
+  import {mapState} from "vuex";
+  export default {
+    name: 'App',
+    computed:{
+        ...mapState(["test"])
+    },
+    components:{
+        "v-test":test
+    }
   }
-}
 </script>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
+<style scoped lang="stylus" rel="stylesheet/stylus">
+  #app
+    width 100%
+    height 100%
+    overflow hidden
+    background pink
+    .test
+      color red
+      font-size 40px
 </style>
