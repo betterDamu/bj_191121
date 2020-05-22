@@ -1,23 +1,27 @@
 <template>
   <div id="app">
-    <!--一级组件来渲染一级路由-->
-    <div class="test">{{test}}</div>
-    <i class="icon-qrcode"></i>
-    <v-test></v-test>
+    <v-head></v-head>
+    <div class="navs">
+      <div class="item">
+        <router-link to="/goods">商品</router-link>
+      </div>
+      <div class="item">
+        <router-link to="/ratings">评价</router-link>
+      </div>
+      <div class="item">
+        <router-link to="/seller">商家</router-link>
+      </div>
+    </div>
     <router-view></router-view>
   </div>
 </template>
 
 <script>
-  import test from "components/test.vue"
-  import {mapState} from "vuex";
+  import head from "components/head/head.vue";
   export default {
     name: 'App',
-    computed:{
-        ...mapState(["test"])
-    },
     components:{
-        "v-test":test
+        "v-head":head
     }
   }
 </script>
@@ -27,8 +31,16 @@
     width 100%
     height 100%
     overflow hidden
-    background pink
-    .test
-      color red
-      font-size 40px
+    .navs
+      display flex
+      height 40px
+      line-height 40px
+      background pink
+      .item
+        flex 1
+        & > a
+          display block
+          width 100%
+          height 100%
+          text-align center
 </style>
