@@ -35,7 +35,6 @@
       display flex
       height 40px
       line-height 40px
-      background pink
       .item
         flex 1
         & > a
