@@ -37,8 +37,8 @@ module.exports = {
   },
 
   build: {
-    // Template for index.html
-    index: path.resolve(__dirname, '../dist/index.html'),
+    // Template for 清除浮动(混合).html
+    index: path.resolve(__dirname, '../dist/清除浮动(混合).html'),
 
     // Paths
     assetsRoot: path.resolve(__dirname, '../dist'),
