@@ -31,9 +31,11 @@
         flex 1
         display flex
         flex-direction column
+        overflow hidden
         .content
             flex 1
             display flex
+            overflow hidden
             .menuWrap
                 flex-basis 80px
                 .menulist

@@ -103,7 +103,7 @@
         width 100%
         height 134px
         position relative
-        /*overflow hidden*/
+        overflow hidden
         .top
             position relative
             box-sizing border-box
