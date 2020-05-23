@@ -12,12 +12,35 @@
     export default {
         name: "stars",
         props:{
+            length:Number,
             size:String,
             score:Number //根据分数去计算出5颗星星的状态
         },
-        data(){
-            return {
-                scoreArr :["on","on","on","half","off"]
+        computed:{
+            scoreArr(){
+                //边界情况的处理
+                if(this.score === undefined) return ["off","off","off","off","off"];
+                if(this.score < 0 ) return ["off","off","off","off","off"];
+                if(this.score > 5 ) return ["on","on","on","on","on"];
+
+
+                let arr =[];
+                //经过27行的处理 我们得到了一个很严格的分数  3.4 -> 3 ; 3.8 ->3.5
+                let score = Math.floor(this.score * 2) / 2
+                //满星的数量
+                let fullSize =  Math.floor(score);
+                //是否需要半星
+                let needHalf = (score % 1) === 0 ? false:true;
+
+                //构建评星对应的数组
+                for(var i=0;i<fullSize;i++){
+                    arr.push("on")
+                }
+                if(needHalf) arr.push("half")
+                while (arr.length < this.length)
+                    arr.push("off")
+
+                return arr;
             }
         }
     }

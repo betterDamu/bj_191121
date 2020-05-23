@@ -1,5 +1,6 @@
 export default {
     seller:{},
     goods:[],
-    ratings:[]
+    ratings:[],
+    length:5 //项目中评分的阈值
 }

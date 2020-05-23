@@ -1,25 +1,9 @@
 <template>
     <div class="list">
         <ul>
-            <li>
-                <v-icon class="icon" size="2" type="discount"></v-icon>
-                <span class="text">在线支付满28送老板</span>
-            </li>
-            <li>
-                <v-icon class="icon" size="2" type="decrease"></v-icon>
-                <span class="text">单人特色套餐</span>
-            </li>
-            <li>
-                <v-icon class="icon" size="2" type="guarantee"></v-icon>
-                <span class="text">特价饮品八折抢购</span>
-            </li>
-            <li>
-                <v-icon class="icon" size="2" type="invoice"></v-icon>
-                <span class="text">海狗人参丸免费赠送</span>
-            </li>
-            <li>
-                <v-icon class="icon" size="2" type="special"></v-icon>
-                <span class="text">清肺雪梨汤八折起售</span>
+            <li v-for="(support,index) in supports" :key="index">
+                <v-icon class="icon" size="2" :type="support.type"></v-icon>
+                <span class="text">{{support.content}}</span>
             </li>
         </ul>
     </div>
@@ -29,6 +13,9 @@
     import icon from "components/icon/icon"
     export default {
         name: "list",
+        props:{
+            supports:Array
+        },
         components:{
             "v-icon":icon
         }

@@ -3,7 +3,7 @@
     "name": "嘉禾一品（温都水城）",
     "description": "硅谷专送",
     "deliveryTime": 28,
-    "score|1-5.1": 4,
+    "score": 0.8,
     "serviceScore": 4.1,
     "foodScore": 4.3,
     "rankRate": 69.2,
@@ -15,7 +15,7 @@
     "bulletin": "是以粥为特色的中式营养快餐，自2004年10月18日创立“嘉和一品”品牌至今，不断优化管理，积极创新，立足于“贴近百姓生活，服务千家万户”",
     "supports": [
       {
-        "type": 0,
+        "type": 1,
         "name": "首单",
         "content": "新用户下单立减17元(不与其它活动同享)"
       },

@@ -17,7 +17,7 @@
 </template>
 
 <script>
-    import {GETSELLER,GETGOODS,GETRATINGS} from "store/mutation_types.js"
+  import {GETSELLER,GETGOODS,GETRATINGS} from "store/mutation_types.js"
   import head from "components/head/head.vue";
   import {mapActions} from "vuex";
   export default {
