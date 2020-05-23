@@ -10,7 +10,7 @@
 
 <script>
     export default {
-        name: "line"
+        name: "v-line"
     }
 </script>
 

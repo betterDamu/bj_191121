@@ -6,20 +6,20 @@
                 <span class="text">在线支付满28送老板</span>
             </li>
             <li>
-                <v-icon class="icon" size="2" type="discount"></v-icon>
-                <span class="text">在线支付满28送老板</span>
+                <v-icon class="icon" size="2" type="decrease"></v-icon>
+                <span class="text">单人特色套餐</span>
             </li>
             <li>
-                <v-icon class="icon" size="2" type="discount"></v-icon>
-                <span class="text">在线支付满28送老板</span>
+                <v-icon class="icon" size="2" type="guarantee"></v-icon>
+                <span class="text">特价饮品八折抢购</span>
             </li>
             <li>
-                <v-icon class="icon" size="2" type="discount"></v-icon>
-                <span class="text">在线支付满28送老板</span>
+                <v-icon class="icon" size="2" type="invoice"></v-icon>
+                <span class="text">海狗人参丸免费赠送</span>
             </li>
             <li>
-                <v-icon class="icon" size="2" type="discount"></v-icon>
-                <span class="text">在线支付满28送老板</span>
+                <v-icon class="icon" size="2" type="special"></v-icon>
+                <span class="text">清肺雪梨汤八折起售</span>
             </li>
         </ul>
     </div>
