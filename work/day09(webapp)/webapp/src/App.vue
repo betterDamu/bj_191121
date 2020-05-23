@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <v-head></v-head>
+    <v-head class="head"></v-head>
     <div class="navs">
       <div class="item">
         <router-link to="/goods">商品</router-link>
@@ -44,10 +44,14 @@
     width 100%
     height 100%
     overflow hidden
+    display flex
+    flex-direction column
+    .head
+      flex-basis 134px
     .navs
       one-px(rgba(7,17,27,.1))
       display flex
-      height 40px
+      flex-basis  40px
       line-height 40px
       .item
         flex 1
