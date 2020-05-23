@@ -42,6 +42,11 @@
             <div class="mainWrap">
                 <div class="main">
                     <!--画遮罩页-->
+                    <h2 class="title">粥品香坊(大运村)</h2>
+                    <div class="stars"></div>
+                    <v-line class="line"> <span class="text">优惠信息</span> </v-line>
+                    <v-list></v-list>
+                    <v-line class="line"> <span class="text">商家公告</span> </v-line>
                 </div>
             </div>
             <div class="footer">
@@ -53,10 +58,14 @@
 
 <script>
     import icon from "components/icon/icon"
+    import line from "components/line/line"
+    import list from "components/list/list"
     export default{
         name: "v-head",
         components:{
-            "v-icon":icon
+            "v-icon":icon,
+            "v-line":line,
+            "v-list":list
         }
     }
 </script>
@@ -180,6 +189,7 @@
             top 0
             bottom 0
             z-index 9
+            backdrop-filter:blur(7px)
             background rgba(7,17,27,.8)
             overflow auto
             .mainWrap
@@ -187,6 +197,27 @@
                 .main
                     @extend .clearfix
                     padding-bottom 96px
+                    overflow hidden /*解决margin穿透 塌陷*/
+                    .title
+                        margin-top 64px
+                        text-align center
+                        line-height 16px
+                        font-size 16px
+                        font-weight 700
+                        color white
+                    .stars
+                        margin-top 16px
+                        margin-bottom 28px
+                        height 24px
+                        background pink
+                    .line
+                        width 80%
+                        margin 0 auto
+                        .text
+                            font-weight 100
+                            margin 0 12px
+                            font-size 14px
+                            color rgba(255,255,255,1)
             .footer
                 margin-top -96px
                 height 96px
