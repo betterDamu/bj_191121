@@ -24,7 +24,7 @@
                 <span class="cartText">购物车</span>
                 <span class="clear" @click="clear">清空</span>
             </div>
-            <div class="content">
+            <div class="content" ref="content">
                 <ul>
                     <li class="item" v-for="(selectedFood,index) in selectedFoods"
                         :key="index">
@@ -44,6 +44,7 @@
 <script>
     import {mapState} from "vuex"
     import control from "components/control/control"
+    import BScroll from "better-scroll"
     export default {
         name: "cart",
         data(){
@@ -88,6 +89,18 @@
                   this.fold = true;
                   return false
               }
+
+
+              //每一次showList产生改变时; 我们要重新去计算整个list的滑屏
+              if(!this.listScroll){
+                  this.listScroll = new BScroll(this.$refs.content,{click:true})
+              }else {
+                  //当dom结构产生改变时 务必使用refresh方法 重新计算better-scroll
+                  this.listScroll.refresh()
+              }
+
+
+
               return !this.fold;
           }
         },
