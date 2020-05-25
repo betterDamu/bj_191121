@@ -11,7 +11,7 @@
                 </ul>
             </div>
             <div class="goodWrap" ref="goodWrap">
-                <ul class="goodList">
+                <ul class="goodList" ref="goodList">
                     <li class="good" v-for="(good,index) in goods" :key="index">
                         <h2 class="goodName">{{good.name}}</h2>
                         <ul class="foodlist">
@@ -48,20 +48,55 @@
                     在右侧列表初始化的时候; 我们去拿到一个数组;该数组中存放每一项滑动顶部时;整个滑屏元素滑动的距离
                     当右侧列表在滑动的时候! 我们去拿到右侧列表滑动到的一个实时位置
                 */
-                return 2
+                let {tops,scrollY} = this;
+                let index = tops.findIndex((top,index)=>{
+                    return scrollY >=top && scrollY < tops[index+1]
+                })
+                return index;
             }
         },
         methods:{
-            ...mapActions([GETGOODS])
+            ...mapActions([GETGOODS]),
+            //初始化tops
+            initTops(){
+                //拿到右侧列表每一项的高度  确保这个时候所有的li已经渲染成功
+                this.$nextTick(()=>{
+                    let goodList = this.$refs.goodList;
+                    let goods = goodList.children;
+                    let top = 0;
+                    let tops = [top];
+                    Array.from(goods).forEach((good)=>{
+                        top += good.offsetHeight;
+                        tops.push(top)
+                    })
+                    this.tops = tops;
+                })
+            },
+            //初始化滑屏
+            initScroll(){
+                this.$nextTick(()=>{
+                    /*
+                       让左右列表都产生滑动;
+                       当右侧列表滑动时;滑到一个具体的分类后,这个分类所对应的左侧列表得选中;还得尽量的往包裹区域的顶部滑
+                   */
+                    let menuScroll = new BScroll(this.$refs.menuWrap);
+                    let goodScroll = new BScroll(this.$refs.goodWrap,{probeType:3});
+                    goodScroll.on("scroll",({x,y})=>{
+                        this.scrollY = Math.abs(y)
+                    })
+                })
+            }
         },
-        mounted(){
-            this[GETGOODS]();
-            /*
-                让左右列表都产生滑动;
-                当右侧列表滑动时;滑到一个具体的分类后,这个分类所对应的左侧列表得选中;还得尽量的往包裹区域的顶部滑
-            */
-            let menuScroll = new BScroll(this.$refs.menuWrap)
-            let goodScroll = new BScroll(this.$refs.goodWrap)
+        async mounted(){
+            //触发一个action的调用!!!  在action中我们发送了获取goods的请求
+            //这行代码本质上最终要运行两个异步逻辑:
+            //      1.发送请求获取数据是异步的 2.请求回来之后数据得到改变 vue让界面更新的过程也是异步的
+            // actions的调用 它返回的是一个promise 当前这个promise只有当整个action的逻辑被全部执行完之后才会改变
+            await this[GETGOODS]();
+
+            //所有和dom尺寸 位置 数量相关的操作最好都放在对应数据改变之后的那个nextTick中
+            this.initScroll();
+            this.initTops();
         },
         components:{
             "v-food":food
@@ -95,6 +130,8 @@
                             margin-right 3px
                         &.active
                             background pink
+                        &:last-child
+                            border-none()
             .goodWrap
                 flex 1
                 overflow hidden
