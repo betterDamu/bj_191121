@@ -100,6 +100,19 @@
             handleCForMenu(index){
                 let top = this.tops[index];
                 this.goodScroll.scrollTo(0,-top,300)
+            },
+            //购物车+1的逻辑
+            add(food){
+                if(!food.count)
+                    //添加一个响应式属性 count
+                    this.$set(food,"count",1)
+                else
+                    food.count++
+            },
+            //购物车-1的逻辑
+            remove(food){
+                if(food.count > 0)
+                    food.count--
             }
         },
         async mounted(){
@@ -112,6 +125,10 @@
             //所有和dom尺寸 位置 数量相关的操作最好都放在对应数据改变之后的那个nextTick中
             this.initScroll();
             this.initTops();
+
+            //购物车控制组件的相关逻辑
+            this.$bus.$on("add",this.add)
+            this.$bus.$on("remove",this.remove)
         },
         components:{
             "v-food":food
