@@ -23,7 +23,7 @@
                 </ul>
             </div>
         </div>
-        <div class="cart"></div>
+        <v-cart class="cartWrap" :selectedFoods="selectedFoods"></v-cart>
     </div>
 </template>
 
@@ -32,6 +32,7 @@
     import {mapState,mapActions} from "vuex";
     import {GETGOODS} from "store/mutation_types.js";
     import food from "components/food/food";
+    import cart from "components/cart/cart"
     export default {
         name: "goods",
         data(){
@@ -42,7 +43,6 @@
         },
         computed:{
             ...mapState(["goods"]),
-
             currentIndex(){
                 /*
                   让左右列表都产生滑动;
@@ -67,6 +67,17 @@
                 this.menuScroll && this.menuScroll.scrollToElement(targetNode,300);
 
                 return index;
+            },
+            selectedFoods(){
+                let selectedFoods = []
+                this.goods.forEach((good)=>{
+                    good.foods.forEach((food)=>{
+                        if(food.count && food.count>0){
+                            selectedFoods.push(food)
+                        }
+                    })
+                })
+                return selectedFoods;
             }
         },
         methods:{
@@ -131,7 +142,8 @@
             this.$bus.$on("remove",this.remove)
         },
         components:{
-            "v-food":food
+            "v-food":food,
+            "v-cart":cart
         }
     }
 </script>
@@ -190,7 +202,7 @@
                                     margin auto
                                 &:last-child
                                     border-none()
-        .cart
-            flex-basis 50px
+        .cartWrap
+            flex-basis 46px
 
 </style>
