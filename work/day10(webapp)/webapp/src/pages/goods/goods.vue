@@ -23,7 +23,7 @@
                 </ul>
             </div>
         </div>
-        <v-cart class="cartWrap" :selectedFoods="selectedFoods"></v-cart>
+        <v-cart class="cartWrap" :selectedFoods="selectedFoods" @clear="clear"></v-cart>
     </div>
 </template>
 
@@ -124,6 +124,16 @@
             remove(food){
                 if(food.count > 0)
                     food.count--
+            },
+            //清空购物车
+            clear(){
+                this.goods.forEach((good)=>{
+                    good.foods.forEach((food)=>{
+                        if(food.count && food.count>0){
+                            food.count=0
+                        }
+                    })
+                })
             }
         },
         async mounted(){

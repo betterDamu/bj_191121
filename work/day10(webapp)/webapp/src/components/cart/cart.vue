@@ -1,7 +1,7 @@
 <template>
     <div>
         <div class="cart">
-            <div class="left" style="color: white">
+            <div class="left" style="color: white" @click="leftFn">
                 <div class="icon">
                     <div class="logo" :class="{active:totalCount > 0}">
                         <i class="icon-shopping_cart"></i>
@@ -19,24 +19,25 @@
                 <span>{{payText}}</span>
             </div>
         </div>
-        <div class="list" v-show="false">
+        <div class="list" v-show="showList">
             <div class="header">
                 <span class="cartText">购物车</span>
-                <span class="clear">清空</span>
+                <span class="clear" @click="clear">清空</span>
             </div>
             <div class="content">
                 <ul>
-                    <li class="item">
-                        <span class="left"> xxx </span>
+                    <li class="item" v-for="(selectedFood,index) in selectedFoods"
+                        :key="index">
+                        <span class="left"> {{selectedFood.name}} </span>
                         <div class="right">
-                            <span class="price">1</span>
-                            <v-control :food="{count:0}"></v-control>
+                            <span class="price">{{selectedFood.price}} </span>
+                            <v-control :food="selectedFood"></v-control>
                         </div>
                     </li>
                 </ul>
             </div>
         </div>
-        <div class="mask" v-show="false"></div>
+        <div class="mask" v-show="showList" @click="fold=true"></div>
     </div>
 </template>
 
@@ -45,6 +46,11 @@
     import control from "components/control/control"
     export default {
         name: "cart",
+        data(){
+          return {
+            fold:true //代表折叠,默认购物车详情页就是折叠的
+          }
+        },
         props:{
             selectedFoods:Array
         },
@@ -68,7 +74,34 @@
               }else{
                   return '去结算'
               }
+          },
+          showList(){
+              /*
+                    showlist 控制着购物车详情页是否可以出现;
+                    购物车详情页显示的两个必要条件:
+                        1. 购物车中必须有数据
+                        2. 用户点击了购物车 (购物车需不需要折叠)
+                                折叠: 购物车详情页不用显示
+                                不折叠: 购物车详情页需要显示
+              */
+              if(this.totalCount <=0 ){
+                  this.fold = true;
+                  return false
+              }
+              return !this.fold;
           }
+        },
+        methods:{
+            clear(){
+                this.$emit("clear")
+            },
+            leftFn(){
+                //购物车没有数据!!!
+                if(this.totalCount <= 0){
+                    return
+                }
+                this.fold = !this.fold;
+            }
         },
         components:{
             "v-control":control
