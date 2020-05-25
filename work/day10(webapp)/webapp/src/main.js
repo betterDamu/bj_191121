@@ -12,11 +12,15 @@ Vue.config.productionTip = false
 
 //定义全局组件
 import icon from "components/icon/icon"
+import split from 'components/split/split.vue'
+Vue.component('v-split', split)
 Vue.component("v-icon",icon)
 
 //定义总线
 Vue.prototype.$bus = new Vue();
 
+//执行全局过滤器的注册
+import './filter'
 new Vue({
   render: h => h(App),
   router,

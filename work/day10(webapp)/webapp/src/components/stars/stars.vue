@@ -3,7 +3,7 @@
     <!--class:"stars stars-36"-->
     <!--class:"stars stars-24"-->
     <div class="stars" :class="`stars-${size}`">
-        <div class="star" :class="item"
+        <div class="star" :class="item" :style="{marginRight:`${mr}px`}"
              v-for="(item,index) in scoreArr"  :key="index"></div>
     </div>
 </template>
@@ -12,6 +12,7 @@
     export default {
         name: "stars",
         props:{
+            mr:String,
             length:Number,
             size:String,
             score:Number //根据分数去计算出5颗星星的状态
