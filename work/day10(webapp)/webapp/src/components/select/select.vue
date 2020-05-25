@@ -1,18 +1,18 @@
 <template>
     <div class="ratings-filter">
         <div class="rating-type border-1px">
-      <span class="block">
-        全部<span class="count">1</span>
-      </span>
-            <span class="block active">
-        推荐<span class="count">1</span>
-      </span>
-            <span class="block">
-        吐槽<span class="count">0</span>
-      </span>
+          <span class="block" :class="{active:type ===2}" @click="changeType(2)">
+            全部<span class="count">{{ratings.length}}</span>
+          </span>
+          <span class="block" :class="{active:type ===0}" @click="changeType(0)">
+            推荐<span class="count">{{ratings.filter(rating => rating.rateType === 0).length }}</span>
+          </span>
+          <span class="block" :class="{active:type ===1}" @click="changeType(1)">
+            吐槽<span class="count">{{ratings.filter(rating => rating.rateType === 1).length }}</span>
+          </span>
         </div>
-        <div class="switch on">
-            <span class="iconfont icon-check_circle"></span>
+        <div class="switch" :class="{on:hasText}">
+            <span class="iconfont icon-check_circle" @click="changeHasText"></span>
             <span class="text">只看有内容的评价</span>
         </div>
     </div>
@@ -20,7 +20,20 @@
 
 <script>
     export default {
-        name: "v-select"
+        name: "v-select",
+        props:{
+            type:Number,
+            hasText:Boolean,
+            ratings:Array
+        },
+        methods:{
+            changeType(type){
+                this.$emit("changeType",type)
+            },
+            changeHasText(){
+                this.$emit("changeHasText")
+            }
+        }
     }
 </script>
 

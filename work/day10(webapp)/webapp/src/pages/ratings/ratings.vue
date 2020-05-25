@@ -28,11 +28,16 @@
 
             <v-split></v-split>
 
-            <v-select></v-select>
+            <v-select
+                    @changeType="changeType"
+                    @changeHasText="changeHasText"
+                    :type="type"
+                    :hasText="hasText"
+                    :ratings="ratings"></v-select>
 
             <div class="rating-wrapper">
                 <ul>
-                    <li class="rating-item" v-for="(rating,index) in ratings" :key="index">
+                    <li class="rating-item" v-for="(rating,index) in filterRatings" :key="index">
                         <div class="avatar">
                             <img width="28" height="28" :src="rating.avatar">
                         </div>
@@ -64,6 +69,12 @@
     import BScroll from "better-scroll"
     export default {
         name: "ratings",
+        data(){
+          return {
+              type:2, // 2->全部 ; 0->推荐 ; 1->吐槽
+              hasText:true //false->不要求有内容 ; true->要求有内容
+          }
+        },
         computed:{
             ...mapState(["seller","ratings","length"]),
             recommendClass(){
@@ -74,10 +85,22 @@
                     if(type === 1)
                         return "icon-thumb_down"
                 }
+            },
+            filterRatings(){
+                return this.ratings.filter(rating => {
+                    return ( (this.type===2 || rating.rateType ===this.type  )
+                        && (this.hasText ===false || rating.text.length>0 ))
+                })
             }
         },
         methods:{
-            ...mapActions([GETRATINGS])
+            ...mapActions([GETRATINGS]),
+            changeType(type){
+                this.type = type;
+            },
+            changeHasText(){
+                this.hasText = !this.hasText
+            }
         },
         async mounted(){
             await this[GETRATINGS]();

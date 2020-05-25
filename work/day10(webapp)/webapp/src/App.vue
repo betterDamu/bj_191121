@@ -30,10 +30,10 @@
     methods:{
         ...mapActions([GETSELLER])
     },
-    mounted(){
+    async mounted(){
         // 在app组件被挂载后 请求商家相关的信息 并要传给头部组件
         //组件上转发action  action内部发送请求拿到数据  提交mutation  通过mutation同步的修改数据
-        this[GETSELLER]()
+        await this[GETSELLER]()
     }
   }
 </script>

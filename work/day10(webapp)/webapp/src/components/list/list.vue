@@ -3,7 +3,7 @@
         <ul>
             <li v-for="(support,index) in supports" :key="index">
                 <v-icon class="icon" size="2" :type="support.type"></v-icon>
-                <span class="text">{{support.content}}</span>
+                <span class="text" :style="{color:color}">{{support.content}}</span>
             </li>
         </ul>
     </div>
@@ -14,7 +14,8 @@
     export default {
         name: "list",
         props:{
-            supports:Array
+            supports:Array,
+            color:String
         },
         components:{
             "v-icon":icon
