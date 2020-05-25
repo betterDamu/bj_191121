@@ -2,9 +2,9 @@
     <div class="goods">
         <div class="content">
             <div class="menuWrap" ref="menuWrap">
-                <ul class="menulist">
+                <ul class="menulist" ref="menulist" >
                     <li class="menu" :class="{active:currentIndex===index}"
-                        v-for="(good,index) in goods" :key="index">
+                        v-for="(good,index) in goods" :key="index" @click="handleCForMenu(index)">
                         <v-icon class="icon" v-if="good.type >=0" size="3" :type="good.type"></v-icon>
                         <span>{{good.name}}</span>
                     </li>
@@ -42,7 +42,16 @@
         },
         computed:{
             ...mapState(["goods"]),
+
             currentIndex(){
+                /*
+                  让左右列表都产生滑动;
+                  当右侧列表滑动时;滑到一个具体的分类后,这个分类所对应的左侧列表得选中;还得尽量的往包裹区域的顶部滑
+
+                   currentIndex 是依赖于tops(静态的数组)  scrollY(在右侧滑屏时会实时改变的!!!)
+              */
+
+
                 //当前这个currentIndex代表的是左侧列表的哪个li该选中!!!!
                 /*
                     在右侧列表初始化的时候; 我们去拿到一个数组;该数组中存放每一项滑动顶部时;整个滑屏元素滑动的距离
@@ -52,6 +61,11 @@
                 let index = tops.findIndex((top,index)=>{
                     return scrollY >=top && scrollY < tops[index+1]
                 })
+
+                //让左侧列表尽量的滑到index所对应的节点上!!
+                let targetNode = this.$refs.menulist && this.$refs.menulist.children[index];
+                this.menuScroll && this.menuScroll.scrollToElement(targetNode,300);
+
                 return index;
             }
         },
@@ -75,16 +89,17 @@
             //初始化滑屏
             initScroll(){
                 this.$nextTick(()=>{
-                    /*
-                       让左右列表都产生滑动;
-                       当右侧列表滑动时;滑到一个具体的分类后,这个分类所对应的左侧列表得选中;还得尽量的往包裹区域的顶部滑
-                   */
-                    let menuScroll = new BScroll(this.$refs.menuWrap);
-                    let goodScroll = new BScroll(this.$refs.goodWrap,{probeType:3});
-                    goodScroll.on("scroll",({x,y})=>{
+                    this.menuScroll = new BScroll(this.$refs.menuWrap,{click:true});
+                    this.goodScroll = new BScroll(this.$refs.goodWrap,{probeType:3,click:true});
+                    this.goodScroll.on("scroll",({x,y})=>{
                         this.scrollY = Math.abs(y)
                     })
                 })
+            },
+            //点击左侧列表对应的函数
+            handleCForMenu(index){
+                let top = this.tops[index];
+                this.goodScroll.scrollTo(0,-top,300)
             }
         },
         async mounted(){
